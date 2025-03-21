@@ -50,9 +50,9 @@ def main():
     
     # Add destroy operators
     alns.add_destroy_operator(destroy_topic_focused)
-#     alns.add_destroy_operator(destroy_difficulty_focused)
     alns.add_destroy_operator(destroy_company_focused)
     alns.add_destroy_operator(destroy_random)
+#     alns.add_destroy_operator(destroy_difficulty_focused)
     
     # Add repair operators
     alns.add_repair_operator(topic_coverage_repair)
@@ -134,8 +134,7 @@ def main():
         study_plan = optimizer.create_study_plan()
         
         # Save results
-        # result['selected_problems'].to_csv('/Users/katherine/Desktop/GitHub/LeetCode-Study-Plan-Generator/adaptive_large_neighborhood_search/result/alns_selected_problems.csv', index=False)
-        study_plan.to_csv('/Users/katherine/Desktop/GitHub/LeetCode-Study-Plan-Generator/adaptive_large_neighborhood_search/result/alns_study_plan.csv', index=False)
+        study_plan.to_csv('./adaptive_large_neighborhood_search/result/alns_study_plan.csv', index=False)
         
         print("\nStudy plan created!")
         # print(f"Selected {len(results['selected_problems'])} problems over {params['study_period_days']} days")
