@@ -1,7 +1,3 @@
-import copy
-import random
-import heapq
-from typing import List, Dict, Set, Tuple
 from leetcode import LeetCodeState, Problem
 
 ### Destroy operators ###

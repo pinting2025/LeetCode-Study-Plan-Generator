@@ -1,12 +1,13 @@
 import argparse
 import numpy.random as rnd
-from typing import Dict, Any
+import pandas as pd
+import json
 
 from leetcode import LeetCode
 from operators import *
-from src.alns import ALNS
-from src.alns.criteria import SimulatedAnnealing, HillClimbing
-from src.helper import save_output
+from helper.alns import ALNS
+from helper.alns.criteria import SimulatedAnnealing, HillClimbing
+from helper.helper import save_output
 
 
 def main():
@@ -119,14 +120,12 @@ def main():
     }
     
     # Save to CSV
-    import pandas as pd
     df = pd.DataFrame(results['selected_problems'])
     df.to_csv('alns_solution.csv', index=False)
     
-    # Save to JSON
-    import json
-    with open('alns_results.json', 'w') as f:
-        json.dump(results, f, indent=2)
+    # # Save to JSON
+    # with open('alns_results.json', 'w') as f:
+    #     json.dump(results, f, indent=2)
 
 if __name__ == "__main__":
     main()
