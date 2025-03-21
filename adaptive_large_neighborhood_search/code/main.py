@@ -7,8 +7,7 @@ from leetcode import LeetCode
 from operators import *
 from helper.alns import ALNS
 from helper.alns.criteria import SimulatedAnnealing, HillClimbing
-from helper.helper import save_output
-
+from helper.mp import *
 
 def main():
     parser = argparse.ArgumentParser(description='Run ALNS for LeetCode study plan')
@@ -62,14 +61,14 @@ def main():
     alns.add_repair_operator(acceptance_rate_repair)
     alns.add_repair_operator(popularity_repair)
     
-    # Acceptance criterion
-    criterion = SimulatedAnnealing(
-        start_temperature=1000,  # High temperature to accept more solutions
-        end_temperature=100,     # Gradually become more selective
-        step=0.99               # Slower cooling to explore more
-    )
+    # # Acceptance criterion
+    # criterion = SimulatedAnnealing(
+    #     start_temperature=1000,  # High temperature to accept more solutions
+    #     end_temperature=100,     # Gradually become more selective
+    #     step=0.99               # Slower cooling to explore more
+    # )
     
-#     criterion = HillClimbing()
+    criterion = HillClimbing()
     
     # Weights for operators
     weights = [100, 20, 5, 1]  # Strong focus on global best
@@ -100,32 +99,58 @@ def main():
     print(f"Number of problems selected: {len(solution.selected_problems)}")
     print(f"Topics covered: {len(solution.covered_topics)}")
     
-    # Save results
-    results = {
-        'objective': solution.objective(),
-        'num_problems': len(solution.selected_problems),
-        'topics_covered': len(solution.covered_topics),
-        'selected_problems': [
+    
+    # # Save to CSV
+    # df = pd.DataFrame(results['selected_problems'])
+    # df.to_csv('alns_solution.csv', index=False)
+
+    # create study plan
+    if result:
+        solution = result.best_state
+        optimizer = LeetCodeOptimizer(args.data, params)
+        
+        # Transfer the ALNS solution to the optimizer format
+        selected_problems_df = pd.DataFrame([
             {
                 'id': p.id,
                 'title': p.title,
                 'difficulty': p.difficulty,
-                'topics': p.topics,
-                'companies': p.companies,
+                'topics_list': p.topics,
+                'companies_list': p.companies,
                 'acceptance_rate': p.acceptance_rate,
-                'estimated_time': p.estimated_time
+                'estimated_time': p.estimated_time,
+                'difficulty_score': 1 if p.difficulty == 'Easy' else 2 if p.difficulty == 'Medium' else 3
             }
             for p in solution.selected_problems
-        ]
-    }
+        ])
     
-    # Save to CSV
-    df = pd.DataFrame(results['selected_problems'])
-    df.to_csv('alns_solution.csv', index=False)
-    
-    # # Save to JSON
-    # with open('alns_results.json', 'w') as f:
-    #     json.dump(results, f, indent=2)
+        # Store the results in the optimizer format
+        optimizer.results = {
+            'selected_problems': selected_problems_df,
+            'covered_topics': list(solution.covered_topics)
+        }
+        
+        # Now you can call create_study_plan
+        study_plan = optimizer.create_study_plan()
+        
+        # Save results
+        # result['selected_problems'].to_csv('/Users/katherine/Desktop/GitHub/LeetCode-Study-Plan-Generator/adaptive_large_neighborhood_search/result/alns_selected_problems.csv', index=False)
+        study_plan.to_csv('/Users/katherine/Desktop/GitHub/LeetCode-Study-Plan-Generator/adaptive_large_neighborhood_search/result/alns_study_plan.csv', index=False)
+        
+        print("\nStudy plan created!")
+        # print(f"Selected {len(results['selected_problems'])} problems over {params['study_period_days']} days")
+        print("Results saved to 'selected_problems.csv' and 'study_plan.csv'")
+        
+        # Print sample of the study plan
+        print("\nSample of your study plan (first 5 days):")
+        days_sample = study_plan[study_plan['day'] <= 5]
+        for day, group in days_sample.groupby('day'):
+            total_time = group['estimated_time'].sum()
+            print(f"\nDay {day} (Total: {total_time} minutes):")
+            for _, problem in group.iterrows():
+                print(f"  - {problem['title']} ({problem['difficulty']}, {problem['estimated_time']} min)")
+                print(f"    Topics: {', '.join(problem['topics'][:3])}" + 
+                     (f" +{len(problem['topics'])-3} more" if len(problem['topics']) > 3 else ""))
 
 if __name__ == "__main__":
     main()

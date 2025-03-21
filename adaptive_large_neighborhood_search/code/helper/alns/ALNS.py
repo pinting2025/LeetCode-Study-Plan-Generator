@@ -325,7 +325,7 @@ class ALNS:
                                                                  criterion)
             
             if max_non_improving is not None:
-                if best.objective() < prev_best_objective:
+                if best.objective() > prev_best_objective:
                     non_improving_count = 0  # Reset counter if new best found
                 else:
                     non_improving_count += 1
@@ -427,7 +427,7 @@ class ALNS:
             The weight index to use when updating the operator weights.
         """
         if criterion.accept(self._rnd_state, best, current, candidate):
-            if candidate.objective() < current.objective():
+            if candidate.objective() > current.objective():
                 weight = _IS_BETTER
             else:
                 weight = _IS_ACCEPTED
@@ -436,7 +436,7 @@ class ALNS:
         else:
             weight = _IS_REJECTED
 
-        if candidate.objective() < best.objective():
+        if candidate.objective() > best.objective():
             # Is a new global best, so we might want to do something to further
             # improve the solution.
             if _ON_BEST in self._callbacks:
