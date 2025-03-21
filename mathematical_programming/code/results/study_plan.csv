@@ -1,0 +1,51 @@
+day,id,title,difficulty,topics,companies,estimated_time,acceptance_rate,cumulative_time
+1,13,Roman to Integer,Easy,"['Math', 'String']","['Amazon', 'Microsoft', 'Adobe', 'Facebook', 'LinkedIn', 'Google', 'Apple', 'Uber', 'Qualtrics', 'Oracle', 'eBay']",10,57.0,10
+1,2,Add Two Numbers,Medium,"['Linked List', 'Math', 'Recursion']","['Bloomberg', 'Microsoft', 'Amazon', 'Google', 'Facebook', 'Apple', 'Adobe', 'Paypal', 'Oracle', 'Uber', 'VMware']",20,35.7,30
+1,21,Merge Two Sorted Lists,Easy,"['Linked List', 'Recursion']","['Amazon', 'Adobe', 'Bloomberg', 'Facebook', 'Microsoft', 'Oracle', 'LinkedIn', 'Uber', 'VMware', 'ByteDance']",10,56.4,40
+1,17,Letter Combinations of a Phone Number,Medium,"['String', 'Backtracking', 'Depth-first Search', 'Recursion']","['Amazon', 'Microsoft', 'Facebook', 'eBay', 'Google', 'Uber', 'Apple', 'Oracle', 'Qualtrics']",20,49.5,60
+1,346,Moving Average from Data Stream,Easy,"['Design', 'Queue']","['Google', 'Apple', 'Amazon']",10,73.6,70
+1,703,Kth Largest Element in a Stream,Easy,"['Heap', 'Design']","['Amazon', 'Microsoft', 'Facebook']",10,50.9,80
+1,173,Binary Search Tree Iterator,Medium,"['Stack', 'Tree', 'Design']","['Facebook', 'ByteDance', 'Microsoft', 'Bloomberg', 'Google', 'Oracle', 'Amazon', 'Apple', 'Adobe']",20,60.6,100
+1,146,LRU Cache,Medium,['Design'],"['Amazon', 'Microsoft', 'Facebook', 'Apple', 'Bloomberg', 'Snapchat', 'eBay', 'ByteDance', 'Google', 'Oracle', 'Uber', 'Paypal', 'Adobe', 'Goldman Sachs']",20,36.2,120
+2,977,Squares of a Sorted Array,Easy,"['Array', 'Two Pointers']","['Facebook', 'Uber', 'Google', 'Amazon', 'Apple', 'Bloomberg', 'Yandex', 'Microsoft', 'ByteDance', 'Cisco']",10,71.8,10
+2,122,Best Time to Buy and Sell Stock II,Easy,"['Array', 'Greedy']","['Amazon', 'Apple', 'Microsoft', 'Facebook', 'Uber']",10,58.8,20
+2,283,Move Zeroes,Easy,"['Array', 'Two Pointers']","['Facebook', 'Bloomberg', 'Microsoft', 'Adobe', 'Apple', 'Amazon', 'Google', 'eBay', 'Uber', 'Paypal', 'Cisco', 'Yandex']",10,58.7,30
+2,121,Best Time to Buy and Sell Stock,Easy,"['Array', 'Dynamic Programming']","['Amazon', 'Microsoft', 'Facebook', 'Apple', 'Adobe', 'Google', 'Bloomberg', 'eBay', 'Uber', 'ByteDance', 'Goldman Sachs', 'Expedia', 'VMware', 'Qualtrics', 'Oracle']",10,51.8,40
+2,53,Maximum Subarray,Easy,"['Array', 'Divide and Conquer', 'Dynamic Programming']","['Microsoft', 'Amazon', 'Apple', 'LinkedIn', 'ByteDance', 'Google', 'Adobe', 'Cisco', 'Facebook', 'Oracle', 'Bloomberg', 'Uber', 'Paypal']",10,47.9,50
+2,1,Two Sum,Easy,"['Array', 'Hash Table']","['Amazon', 'Google', 'Apple', 'Adobe', 'Microsoft', 'Bloomberg', 'Facebook', 'Oracle', 'Uber', 'Expedia', 'Twitter', 'Cisco', 'Goldman Sachs', 'Yandex']",10,46.7,60
+2,78,Subsets,Medium,"['Array', 'Backtracking', 'Bit Manipulation']","['Facebook', 'Bloomberg', 'Amazon', 'Uber', 'Microsoft', 'Apple', 'ByteDance']",20,65.6,80
+2,238,Product of Array Except Self,Medium,['Array'],"['Facebook', 'Amazon', 'Apple', 'Microsoft', 'Uber', 'Adobe', 'VMware', 'Oracle']",20,61.4,100
+2,48,Rotate Image,Medium,['Array'],"['Amazon', 'Microsoft', 'Apple', 'Uber', 'Cisco', 'Facebook', 'Adobe', 'Google', 'eBay']",20,60.5,120
+3,39,Combination Sum,Medium,"['Array', 'Backtracking']","['Facebook', 'Microsoft', 'Bloomberg', 'Amazon', 'Apple', 'Uber', 'Adobe', 'eBay', 'ByteDance']",20,59.7,20
+3,287,Find the Duplicate Number,Medium,"['Array', 'Two Pointers', 'Binary Search']","['Microsoft', 'Amazon', 'Apple', 'Google', 'Bloomberg', 'Paypal', 'Goldman Sachs']",20,57.9,40
+3,62,Unique Paths,Medium,"['Array', 'Dynamic Programming']","['Microsoft', 'Amazon', 'Facebook', 'Google', 'Bloomberg', 'Qualtrics', 'VMware', 'ByteDance']",20,56.3,60
+3,11,Container With Most Water,Medium,"['Array', 'Two Pointers']","['Amazon', 'Google', 'Microsoft', 'Facebook', 'Goldman Sachs', 'Adobe', 'Apple']",20,52.9,80
+3,56,Merge Intervals,Medium,"['Array', 'Sort']","['Facebook', 'Amazon', 'Bloomberg', 'Apple', 'Google', 'Microsoft', 'Adobe', 'Uber', 'Twitter', 'eBay', 'Paypal', 'Cisco', 'Oracle', 'Yandex', 'Qualtrics', 'VMware']",20,41.4,100
+3,54,Spiral Matrix,Medium,['Array'],"['Microsoft', 'Apple', 'Facebook', 'Google', 'Amazon', 'ByteDance', 'Expedia', 'Paypal', 'eBay']",20,36.5,120
+4,33,Search in Rotated Sorted Array,Medium,"['Array', 'Binary Search']","['Amazon', 'Facebook', 'Microsoft', 'LinkedIn', 'Oracle', 'Apple', 'Bloomberg', 'Expedia', 'Google', 'Adobe', 'ByteDance', 'eBay', 'Cisco']",20,36.1,20
+4,31,Next Permutation,Medium,['Array'],"['Facebook', 'Amazon', 'Google', 'Microsoft', 'Bloomberg', 'Apple', 'Goldman Sachs']",20,33.9,40
+4,15,3Sum,Medium,"['Array', 'Two Pointers']","['Amazon', 'Facebook', 'Microsoft', 'Bloomberg', 'Apple', 'Adobe', 'VMware', 'Google', 'Cisco', 'Goldman Sachs', 'eBay']",20,28.3,60
+4,401,Binary Watch,Easy,"['Backtracking', 'Bit Manipulation']","['Apple', 'Google']",10,48.5,70
+4,46,Permutations,Medium,['Backtracking'],"['Facebook', 'Amazon', 'ByteDance', 'LinkedIn', 'Apple', 'eBay', 'Microsoft', 'Paypal', 'Oracle']",20,67.1,90
+4,22,Generate Parentheses,Medium,"['String', 'Backtracking']","['Microsoft', 'Facebook', 'Google', 'Bloomberg', 'Amazon', 'Apple', 'Adobe', 'ByteDance', 'Oracle']",20,65.7,110
+5,215,Kth Largest Element in an Array,Medium,"['Divide and Conquer', 'Heap']","['Facebook', 'Amazon', 'Apple', 'Microsoft', 'Bloomberg', 'ByteDance', 'LinkedIn', 'Adobe', 'Google']",20,58.9,20
+5,20,Valid Parentheses,Easy,"['String', 'Stack']","['Amazon', 'Bloomberg', 'Facebook', 'Apple', 'Microsoft', 'Expedia', 'Google', 'LinkedIn', 'Goldman Sachs', 'Oracle', 'Paypal', 'eBay', 'Adobe']",10,40.0,30
+5,49,Group Anagrams,Medium,"['Hash Table', 'String']","['Amazon', 'Microsoft', 'Goldman Sachs', 'Apple', 'Uber', 'eBay', 'VMware', 'Oracle', 'Yandex', 'Expedia', 'Facebook', 'Google', 'Bloomberg', 'Cisco', 'ByteDance']",20,59.7,50
+5,443,String Compression,Medium,['String'],"['Goldman Sachs', 'Yandex', 'Microsoft', 'Apple', 'Facebook', 'Amazon', 'eBay', 'Google', 'VMware', 'Cisco']",20,44.1,70
+5,91,Decode Ways,Medium,"['String', 'Dynamic Programming']","['Facebook', 'Google', 'Cisco', 'Amazon', 'Microsoft', 'Goldman Sachs', 'ByteDance', 'Apple', 'Uber', 'Adobe']",20,26.9,90
+5,206,Reverse Linked List,Easy,['Linked List'],"['Adobe', 'Amazon', 'Facebook', 'Apple', 'Microsoft', 'Yandex', 'Google', 'Uber', 'Oracle', 'Bloomberg', 'Cisco', 'Goldman Sachs', 'ByteDance']",10,65.7,100
+5,349,Intersection of Two Arrays,Easy,"['Hash Table', 'Two Pointers', 'Binary Search', 'Sort']","['Facebook', 'Amazon', 'Bloomberg', 'ByteDance', 'Apple']",10,65.3,110
+5,242,Valid Anagram,Easy,"['Hash Table', 'Sort']","['Bloomberg', 'Facebook', 'Microsoft', 'Amazon', 'Apple', 'Oracle', 'Google', 'Goldman Sachs', 'Adobe', 'Cisco', 'Paypal']",10,58.9,120
+6,739,Daily Temperatures,Medium,"['Hash Table', 'Stack']","['Facebook', 'Bloomberg', 'Amazon', 'ByteDance', 'Google', 'Adobe', 'Microsoft', 'Paypal', 'Oracle', 'Twitter']",20,64.8,20
+6,347,Top K Frequent Elements,Medium,"['Hash Table', 'Heap']","['Facebook', 'Amazon', 'Oracle', 'Apple', 'Bloomberg', 'Google', 'ByteDance', 'Microsoft', 'eBay']",20,62.6,40
+6,300,Longest Increasing Subsequence,Medium,"['Binary Search', 'Dynamic Programming']","['Apple', 'Amazon', 'Facebook', 'Bloomberg', 'Google', 'ByteDance', 'Twitter', 'Microsoft']",20,44.5,60
+6,253,Meeting Rooms II,Medium,"['Heap', 'Greedy', 'Sort']","['Amazon', 'Bloomberg', 'Facebook', 'Google', 'Microsoft', 'Oracle', 'Uber', 'Yandex', 'ByteDance', 'Twitter', 'Apple', 'Adobe', 'Expedia', 'eBay']",20,47.1,80
+6,103,Binary Tree Zigzag Level Order Traversal,Medium,"['Stack', 'Tree', 'Breadth-first Search']","['Amazon', 'Microsoft', 'Bloomberg', 'Apple', 'Facebook', 'Qualtrics', 'eBay', 'Adobe', 'ByteDance', 'Google', 'Goldman Sachs', 'Oracle']",20,50.4,100
+6,101,Symmetric Tree,Easy,"['Tree', 'Depth-first Search', 'Breadth-first Search']","['Amazon', 'Yandex', 'Apple', 'Uber', 'Google', 'Microsoft']",10,48.4,110
+7,102,Binary Tree Level Order Traversal,Medium,"['Tree', 'Breadth-first Search']","['Bloomberg', 'Amazon', 'Facebook', 'Microsoft', 'LinkedIn', 'Adobe', 'Paypal', 'Google', 'Uber']",20,57.0,20
+7,236,Lowest Common Ancestor of a Binary Tree,Medium,['Tree'],"['Facebook', 'Microsoft', 'Amazon', 'Oracle', 'LinkedIn', 'Apple', 'Bloomberg', 'Adobe', 'Google', 'Uber']",20,49.3,40
+7,997,Find the Town Judge,Easy,['Graph'],['Amazon'],10,49.8,50
+7,399,Evaluate Division,Medium,"['Union Find', 'Graph']","['Bloomberg', 'Amazon', 'Uber', 'Google', 'Facebook', 'Microsoft', 'Apple']",20,54.6,70
+7,207,Course Schedule,Medium,"['Depth-first Search', 'Breadth-first Search', 'Graph', 'Topological Sort']","['Amazon', 'Facebook', 'Microsoft', 'ByteDance', 'Bloomberg', 'Google']",20,44.3,90
+7,332,Reconstruct Itinerary,Medium,"['Depth-first Search', 'Graph']","['Uber', 'Amazon', 'Bloomberg', 'Facebook', 'Microsoft', 'Expedia', 'Qualtrics', 'Twitter', 'Google', 'eBay', 'VMware']",20,38.1,110
+8,200,Number of Islands,Medium,"['Depth-first Search', 'Breadth-first Search', 'Union Find']","['Amazon', 'Bloomberg', 'Microsoft', 'Oracle', 'Facebook', 'Apple', 'Uber', 'Google', 'Yandex', 'Qualtrics', 'Snapchat', 'Expedia', 'LinkedIn', 'eBay', 'Goldman Sachs', 'VMware']",20,49.5,20
