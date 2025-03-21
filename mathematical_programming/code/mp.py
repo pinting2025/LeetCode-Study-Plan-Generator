@@ -688,8 +688,8 @@ def main():
         study_plan = optimizer.create_study_plan()
         
         # Save results
-        results['selected_problems'].to_csv('selected_problems.csv', index=False)
-        study_plan.to_csv('study_plan.csv', index=False)
+        results['selected_problems'].to_csv('/Users/katherine/Desktop/GitHub/LeetCode-Study-Plan-Generator/mathematical_programming/result/selected_problems.csv', index=False)
+        study_plan.to_csv('/Users/katherine/Desktop/GitHub/LeetCode-Study-Plan-Generator/mathematical_programming/result/study_plan.csv', index=False)
         
         print("\nStudy plan created!")
         print(f"Selected {len(results['selected_problems'])} problems over {params['study_period_days']} days")
