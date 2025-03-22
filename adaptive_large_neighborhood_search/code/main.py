@@ -10,10 +10,6 @@ from helper.alns.criteria import SimulatedAnnealing, HillClimbing
 from helper.mp import *
 
 def main():
-    parser = argparse.ArgumentParser(description='Run ALNS for LeetCode study plan')
-    parser.add_argument('--data', type=str, required=True, help='Path to LeetCode problems CSV file')
-    args = parser.parse_args()
-    
     # Set random seed
     seed = 42
     rnd.seed(seed)
@@ -35,7 +31,8 @@ def main():
     }
     
     # Initialize problem
-    leetcode = LeetCode(args.data, params)
+    data = './data/_leetcode_v2.csv'
+    leetcode = LeetCode(data, params)
     
     # Get initial solution using MP model
     initial_state = leetcode.construct_initial_solution(seed)
@@ -98,16 +95,11 @@ def main():
     print(f"Best objective value: {solution.objective():.4f}")
     print(f"Number of problems selected: {len(solution.selected_problems)}")
     print(f"Topics covered: {len(solution.covered_topics)}")
-    
-    
-    # # Save to CSV
-    # df = pd.DataFrame(results['selected_problems'])
-    # df.to_csv('alns_solution.csv', index=False)
 
     # create study plan
     if result:
         solution = result.best_state
-        optimizer = LeetCodeOptimizer(args.data, params)
+        optimizer = LeetCodeOptimizer(data, params)
         
         # Transfer the ALNS solution to the optimizer format
         selected_problems_df = pd.DataFrame([
@@ -137,7 +129,6 @@ def main():
         study_plan.to_csv('./adaptive_large_neighborhood_search/result/alns_study_plan.csv', index=False)
         
         print("\nStudy plan created!")
-        # print(f"Selected {len(results['selected_problems'])} problems over {params['study_period_days']} days")
         print("Results saved to 'selected_problems.csv' and 'study_plan.csv'")
         
         # Print sample of the study plan

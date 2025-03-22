@@ -381,19 +381,19 @@ class LeetCodeOptimizer:
             ctname="min_topic_coverage"
         )
         
-        # 7. Maximum number of problems constraint
-        max_problems = min(50, self.study_period_days * 2)  # At most 2 problems per day
-        self.model.add_constraint(
-            total_selected <= max_problems,
-            ctname="max_problems"
-        )
+        # # 7. Maximum number of problems constraint
+        # max_problems = min(50, self.study_period_days * 2)  # At most 2 problems per day
+        # self.model.add_constraint(
+        #     total_selected <= max_problems,
+        #     ctname="max_problems"
+        # )
         
-        # 8. Minimum number of problems constraint
-        min_problems = max(10, self.study_period_days // 3)  # At least 1 problem every 3 days
-        self.model.add_constraint(
-            total_selected >= min_problems,
-            ctname="min_problems"
-        )
+        # # 8. Minimum number of problems constraint
+        # min_problems = max(10, self.study_period_days // 3)  # At least 1 problem every 3 days
+        # self.model.add_constraint(
+        #     total_selected >= min_problems,
+        #     ctname="min_problems"
+        # )
         
         # 9. Difficulty progression within topics
         # For each topic, ensure easy problems come before medium, and medium before hard
