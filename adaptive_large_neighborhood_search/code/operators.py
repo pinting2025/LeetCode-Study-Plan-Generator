@@ -98,7 +98,8 @@ def destroy_topic_focused(current: LeetCodeState, random_state, destroy_factor=0
 def destroy_difficulty_focused(current: LeetCodeState, random_state, destroy_factor=0.3):
     """Difficulty-focused destroy operator
     
-    Removes problems of a specific difficulty to improve difficulty distribution
+    Removes problems of a specific difficulty to improve difficulty distribution,
+    with a bias towards removing easier problems.
     
     Args:
         current: LeetCodeState
@@ -127,8 +128,19 @@ def destroy_difficulty_focused(current: LeetCodeState, random_state, destroy_fac
         for diff in difficulties
     ]
     
-    # Select difficulty with highest deviation from target
-    target_difficulty = max(difficulty_scores, key=lambda x: x[1])[0]
+    # Bias towards removing easier problems
+    if random_state.random() < 0.9:  # 70% chance to focus on easier problems
+        # Find the easiest difficulty that has problems
+        # for diff in ['Easy', 'Medium']:
+        for diff in ['Easy']:
+            if current_dist[diff] > 0:
+                target_difficulty = diff
+                break
+        else:
+            target_difficulty = max(difficulty_scores, key=lambda x: x[1])[0]
+    else:
+        # Select difficulty with highest deviation from target
+        target_difficulty = max(difficulty_scores, key=lambda x: x[1])[0]
     
     # Find problems of target difficulty
     difficulty_problems = [
@@ -474,6 +486,70 @@ def popularity_repair(destroyed: LeetCodeState, random_state):
     problem_scores.sort(key=lambda x: x[1], reverse=True)
     
     # Try to add problems in order of contribution
+    for problem, _ in problem_scores:
+        if repaired.can_add_problem(problem):
+            repaired.add_problem(problem)
+    
+    return repaired
+
+def difficulty_repair(destroyed: LeetCodeState, random_state):
+    """Difficulty repair operator
+    
+    Repairs solution by focusing on improving the difficulty score by prioritizing harder problems.
+    This operator specifically targets the difficulty component of the objective function.
+    
+    Args:
+        destroyed: LeetCodeState
+            State after destroying
+        random_state: random_state
+            Random state for reproducibility
+    Returns:
+        repaired: LeetCodeState
+            State after repairing
+    """
+    repaired = destroyed.copy()
+    
+    # Get current difficulty distribution
+    current_dist = repaired._get_current_difficulty_distribution()
+    target_dist = repaired.difficulty_distribution[repaired.skill_level]
+    
+    # Find available problems
+    available_problems = [
+        problem for problem in repaired.problems
+        if problem.id not in repaired.selected_problem_ids
+    ]
+    
+    if not available_problems:
+        return repaired
+    
+    # Calculate difficulty scores for each problem
+    problem_scores = []
+    for problem in available_problems:
+        if repaired.can_add_problem(problem):
+            # Create temporary state to evaluate problem
+            temp_state = repaired.copy()
+            temp_state.add_problem(problem)
+            
+            # Calculate difficulty score based on problem difficulty
+            if problem.difficulty == 'Hard':
+                difficulty_score = 1.0
+            elif problem.difficulty == 'Medium':
+                difficulty_score = 0.6
+            else:  # Easy
+                difficulty_score = 0.2
+            
+            # Calculate objective contribution
+            objective_diff = temp_state.objective() - repaired.objective()
+            
+            # Combine difficulty score with objective contribution
+            # Give more weight to difficulty score for harder problems
+            combined_score = (difficulty_score * 0.7) + (objective_diff * 0.3)
+            problem_scores.append((problem, combined_score))
+    
+    # Sort problems by combined score
+    problem_scores.sort(key=lambda x: x[1], reverse=True)
+    
+    # Try to add problems in order of score
     for problem, _ in problem_scores:
         if repaired.can_add_problem(problem):
             repaired.add_problem(problem)

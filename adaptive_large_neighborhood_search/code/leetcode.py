@@ -203,13 +203,13 @@ class LeetCodeState(State):
         if self.total_time + problem.estimated_time > self.total_available_minutes:
             return False
         
-        # Check difficulty distribution
-        current_dist = self._get_current_difficulty_distribution()
-        target_dist = self.difficulty_distribution[self.skill_level]
+        # # Check difficulty distribution
+        # current_dist = self._get_current_difficulty_distribution()
+        # target_dist = self.difficulty_distribution[self.skill_level]
         
-        # If adding this problem would make the distribution too far from target
-        if current_dist[problem.difficulty] + 1/len(self.problems) > target_dist[problem.difficulty] * 1.2:
-            return False
+        # # If adding this problem would make the distribution too far from target
+        # if current_dist[problem.difficulty] + 1/len(self.problems) > target_dist[problem.difficulty] * 1.5:
+        #     return False
         
         # For skill levels 1-3, no hard problems allowed
         if self.skill_level <= 3 and problem.difficulty == 'Hard':
@@ -319,13 +319,30 @@ class LeetCodeState(State):
         # 5. Problem popularity
         problem_popularity_obj = sum(p.popularity_score for p in self.selected_problems)
         
-        # Combined objective function
+        # 6. Difficulty value - new component
+        difficulty_obj = 0
+        for problem in self.selected_problems:
+            # Assign higher scores to harder problems
+            if problem.difficulty == 'Hard':
+                difficulty_obj += 1.0
+            elif problem.difficulty == 'Medium':
+                difficulty_obj += 0.7
+            else:  # Easy
+                difficulty_obj += 0.1
+        
+        # Normalize difficulty objective by number of problems
+        if self.selected_problems:
+            difficulty_obj = difficulty_obj / len(self.selected_problems)
+        
+        # Combined objective function with modified weights
         objective = (
             self.weights['target_company'] * target_company_obj +
             self.weights['topic_coverage'] * topic_coverage_obj +
             self.weights['company_count'] * company_count_obj +
             self.weights['acceptance_rate'] * acceptance_rate_obj +
-            self.weights['problem_popularity'] * problem_popularity_obj
+            self.weights['problem_popularity'] * problem_popularity_obj +
+            # 0.25 * difficulty_obj  # Add difficulty component with significant weight
+            self.weights['difficulty'] * difficulty_obj
         )
         
         return objective
@@ -415,6 +432,7 @@ class LeetCode(object):
             }),
             topic_importance=self.parser.topic_importance  # Pass the topic_importance
         )
+        
     
     def construct_initial_solution(self, seed=None):
         """Construct initial solution using MP model.
