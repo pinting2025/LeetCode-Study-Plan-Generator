@@ -16,9 +16,9 @@ def main():
     
     # Define problem parameters
     params = {
-        'target_companies': ['Amazon', 'Google', 'Microsoft'],
-        'skill_level': 3,
-        'target_role': 'Software Engineer',
+        'target_companies': ['Amazon', 'Google', 'Microsoft', 'Facebook', 'Apple'],
+        'skill_level': 3,  
+        'target_role': 'Software Engineer', 
         'study_period_days': 30,
         'max_study_hours_per_day': 2,
         'objective_weights': {

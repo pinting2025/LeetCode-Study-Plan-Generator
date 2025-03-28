@@ -207,13 +207,20 @@ class LeetCodeState(State):
         current_dist = self._get_current_difficulty_distribution()
         target_dist = self.difficulty_distribution[self.skill_level]
         
-        # If adding this problem would make the distribution too far from target
-        if current_dist[problem.difficulty] + 1/len(self.problems) > target_dist[problem.difficulty] * 1.2:
-            return False
         
         # For skill levels 1-3, no hard problems allowed
         if self.skill_level <= 3 and problem.difficulty == 'Hard':
             return False
+        
+        # # If adding this problem would make the distribution too far from target
+        # if current_dist[problem.difficulty] + 1/len(self.problems) > target_dist[problem.difficulty] * 1.2:
+        #     return False
+        
+        total_selected = len(self.selected_problem_ids)
+        # If adding this problem would exceed the upper bound (target proportion + 2)
+        if (current_dist[problem.difficulty] * total_selected + 1) > (target_dist[problem.difficulty] * (total_selected + 1) + 2):
+            return False
+        
         
         return True
     
@@ -447,12 +454,16 @@ class LeetCode(object):
             # Find problem in our problem list by ID
             for problem in self.problems:
                 if problem.id == problem_id:
-                    if self.state.can_add_problem(problem):
-                        self.state.add_problem(problem)
+                    # Directly add the problem to the solution without checking constraints
+                    self.state.selected_problems.append(problem)
+                    self.state.selected_problem_ids.add(problem.id)
+                    self.state.covered_topics.update(problem.topics)
+                    self.state.total_time += problem.estimated_time
                     break
         
+        print(f"Added {len(self.state.selected_problems)} problems from MP solution")
         return self.state
-    
+
     def get_state(self) -> LeetCodeState:
         """Get the current state.
         
@@ -512,6 +523,3 @@ class LeetCode(object):
         """
         return self.state.total_available_minutes - self.state.total_time
                 
-          
-
-

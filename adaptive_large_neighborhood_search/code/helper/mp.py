@@ -472,7 +472,7 @@ class LeetCodeOptimizer:
             self.weights['acceptance_rate'] * acceptance_rate_obj +
             self.weights['problem_popularity'] * problem_popularity_obj
         )
-        
+
         # Set the objective
         self.model.maximize(objective)
         
@@ -677,7 +677,7 @@ def main():
     }
     
     # Create optimizer
-    optimizer = LeetCodeOptimizer('/Users/katherine/Desktop/GitHub/Leetcode_study_plan/data/_leetcode_v2.csv', params)
+    optimizer = LeetCodeOptimizer('data/_leetcode_v2.csv', params)
     
     # Build and solve the model
     optimizer.build_model()
@@ -688,8 +688,8 @@ def main():
         study_plan = optimizer.create_study_plan()
         
         # Save results
-        results['selected_problems'].to_csv('/Users/katherine/Desktop/GitHub/LeetCode-Study-Plan-Generator/mathematical_programming/result/selected_problems.csv', index=False)
-        study_plan.to_csv('/Users/katherine/Desktop/GitHub/LeetCode-Study-Plan-Generator/mathematical_programming/result/study_plan.csv', index=False)
+        results['selected_problems'].to_csv('mathematical_programming/result/selected_problems.csv', index=False)
+        study_plan.to_csv('mathematical_programming/result/study_plan.csv', index=False)
         
         print("\nStudy plan created!")
         print(f"Selected {len(results['selected_problems'])} problems over {params['study_period_days']} days")
