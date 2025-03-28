@@ -4,6 +4,7 @@ import pandas as pd
 from typing import List, Dict, Set, Tuple
 from helper.alns import State
 from helper.mp import LeetCodeOptimizer
+import networkx as nx
 
 class Parser(object):
     def __init__(self, csv_file: str):
@@ -138,6 +139,51 @@ class Problem(object):
             self.normalized_company_count = 0.0
 
 class LeetCodeState(State):
+    TOPIC_PREREQS = {
+    "Array": [],
+    "String": ["Array"],
+    "Linked List": ["Array"],
+    "Stack": ["Array", "Linked List"],
+    "Queue": ["Array", "Linked List"],
+    "Hash Table": ["Array"],
+    "Tree": ["Linked List"],
+    "Heap": ["Array", "Tree"],
+    "Graph": ["Array", "Tree"],
+    "Trie": ["Tree", "Hash Table"], 
+    "Math": [],
+    "Bit Manipulation": ["Math"],
+    "Two Pointers": ["Array"],
+    "Sliding Window": ["Two Pointers", "Array"],
+    "Binary Search": ["Array"],
+    "Recursion": [],
+    "Backtracking": ["Recursion"],
+    "Greedy": ["Sort"],
+    "Sort": ["Array", "Math"],
+    "Design": [],
+    "Binary Indexed Tree": ["Array", "Binary Search", "Bit Manipulation"],
+    "Segment Tree": ["Tree", "Binary Search", "Recursion"],
+    "Union Find": ["Array", "Tree"],
+    "Ordered Map": ["Hash Table"],
+    "Dynamic Programming": ["Recursion", "Array"],
+    "Divide and Conquer": ["Recursion"],
+    "Depth-first Search": ["Graph", "Tree", "Recursion", "Stack"],
+    "Breadth-first Search": ["Graph", "Tree", "Queue"],
+    "Topological Sort": ["Graph", "Depth-first Search"],
+    "Line Sweep": ["Sort"],
+    "Brainteaser": ["Math"],         
+    }
+
+    SKILL_LEVEL_FULFILLED_PREREQS = {
+        1: ["Array", "Math", "Recursion"],  # Beginner
+        2: ["Array", "Math", "Recursion", "String", "Hash Table", "Two Pointers", "Binary Search", "Sort"],  # Basic
+        3: ["Array", "Math", "Recursion", "String", "Hash Table", "Two Pointers", "Binary Search", 
+            "Sort", "Linked List", "Stack", "Queue", "Bit Manipulation", "Greedy"],  # Intermediate
+        4: ["Array", "Math", "Recursion", "String", "Hash Table", "Two Pointers", "Binary Search", 
+            "Sort", "Linked List", "Stack", "Queue", "Bit Manipulation", "Greedy", 
+            "Tree", "Graph", "Dynamic Programming", "Backtracking", "Divide and Conquer"],  # Advanced
+        5: [], 
+    }
+
     def __init__(self, name: str, problems: List[Problem], target_companies: List[str],
                  skill_level: int, target_role: str, study_period_days: int,
                  max_study_hours_per_day: int, weights: Dict[str, float], topic_importance: Dict[str, Dict[str, float]]):
@@ -195,6 +241,7 @@ class LeetCodeState(State):
         Returns:
             bool: True if problem can be added, False otherwise
         """
+        total_selected = len(self.selected_problem_ids)
         # Check if problem is already selected
         if problem.id in self.selected_problem_ids:
             return False
@@ -207,20 +254,56 @@ class LeetCodeState(State):
         current_dist = self._get_current_difficulty_distribution()
         target_dist = self.difficulty_distribution[self.skill_level]
         
-        
         # For skill levels 1-3, no hard problems allowed
         if self.skill_level <= 3 and problem.difficulty == 'Hard':
             return False
         
-        # # If adding this problem would make the distribution too far from target
+        # Check prerequisite topics for this problem
+        for topic in problem.topics:
+            if topic in self.covered_topics:
+                continue
+                
+            # Check if prerequisites for this topic are covered
+            prereqs = self.TOPIC_PREREQS.get(topic, [])
+            if prereqs:
+                # Check if all immediate prerequisites are already covered
+                if not all(prereq in self.covered_topics for prereq in prereqs):
+                    return False
+                
+        # Check difficulty progression within topics
+        # If adding a medium problem, ensure at least one easy problem exists for each topic
+        if problem.difficulty == 'Medium':
+            for topic in problem.topics:
+                # Check if we have any easy problems for this topic
+                has_easy = False
+                for p in self.selected_problems:
+                    if topic in p.topics and p.difficulty == 'Easy':
+                        has_easy = True
+                        break
+            
+                if not has_easy:
+                    return False
+    
+         # If adding a hard problem, ensure at least one medium problem exists for each topic
+        if problem.difficulty == 'Hard':
+            for topic in problem.topics:
+                # Check if we have any medium problems for this topic
+                has_medium = False
+                for p in self.selected_problems:
+                    if topic in p.topics and p.difficulty == 'Medium':
+                        has_medium = True
+                        break
+            
+                if not has_medium:
+                    return False
+        
+        # If adding this problem would make the distribution too far from target
         # if current_dist[problem.difficulty] + 1/len(self.problems) > target_dist[problem.difficulty] * 1.2:
         #     return False
         
-        total_selected = len(self.selected_problem_ids)
         # If adding this problem would exceed the upper bound (target proportion + 2)
-        if (current_dist[problem.difficulty] * total_selected + 1) > (target_dist[problem.difficulty] * (total_selected + 1) + 2):
-            return False
-        
+        # if (current_dist[problem.difficulty] * total_selected + 1) > (target_dist[problem.difficulty] * (total_selected + 1) + 2):
+        #     return False
         
         return True
     
@@ -522,4 +605,3 @@ class LeetCode(object):
             int: Available time in minutes
         """
         return self.state.total_available_minutes - self.state.total_time
-                
