@@ -98,12 +98,14 @@ class LeetCodeOptimizer:
         
         # Objective weights
         self.weights = params.get('objective_weights', {
-            'target_company': 0.30,
-            'topic_coverage': 0.25,
-            'company_count': 0.20,
-            'acceptance_rate': 0.15,
-            'problem_popularity': 0.10
+            'target_company': 0.25,      # Reduced from 0.30
+            'topic_coverage': 0.15,      # Reduced from 0.25
+            'company_count': 0.10,       # Reduced from 0.20
+            'acceptance_rate': 0.10,     # Kept same
+            'problem_popularity': 0.10,  # Kept same
+            'difficulty': 0.30 
         })
+    
         
         # Calculate total available minutes
         self.total_available_minutes = self.study_period_days * self.max_study_hours_per_day * 60
@@ -464,13 +466,23 @@ class LeetCodeOptimizer:
             for i in self.df.index
         )
         
+        # 6. Difficulty
+        difficulty_obj = self.model.sum(
+    self.selected_vars[i] * (
+        1.0 if self.df.iloc[i]['difficulty'] == 'Hard' else
+        0.5 if self.df.iloc[i]['difficulty'] == 'Medium' else
+        -1.0  # Easy problems
+    ) for i in self.df.index
+)
+
         # Combined objective function
         objective = (
             self.weights['target_company'] * target_company_obj +
             self.weights['topic_coverage'] * topic_coverage_obj +
             self.weights['company_count'] * company_count_obj +
             self.weights['acceptance_rate'] * acceptance_rate_obj +
-            self.weights['problem_popularity'] * problem_popularity_obj
+            self.weights['problem_popularity'] * problem_popularity_obj + 
+            self.weights['difficulty'] * difficulty_obj
         )
 
         # Set the objective

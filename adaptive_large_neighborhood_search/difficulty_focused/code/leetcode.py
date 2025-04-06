@@ -513,12 +513,12 @@ class LeetCode(object):
             study_period_days=params.get('study_period_days', 30),
             max_study_hours_per_day=params.get('max_study_hours_per_day', 2),
             weights=params.get('objective_weights', {
-                'target_company': 0.30,
-                'topic_coverage': 0.25,
-                'company_count': 0.20,
-                'acceptance_rate': 0.15,
+                'target_company': 0.25,
+                'topic_coverage': 0.15,
+                'company_count': 0.10,
+                'acceptance_rate': 0.10,
                 'problem_popularity': 0.10,
-                'difficulty': 0.3
+                'difficulty': 0.30
             }),
             topic_importance=self.parser.topic_importance  # Pass the topic_importance
         )

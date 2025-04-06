@@ -22,12 +22,12 @@ def main():
         'study_period_days': 30,
         'max_study_hours_per_day': 2,
         'objective_weights': {
-            'target_company': 0.30,      # Reduced from 0.30
-            'topic_coverage': 0.25,      # Reduced from 0.25
-            'company_count': 0.20,       # Reduced from 0.20
-            'acceptance_rate': 0.15,     # Kept same
+            'target_company': 0.25,      # Reduced from 0.30
+            'topic_coverage': 0.15,      # Reduced from 0.25
+            'company_count': 0.10,       # Reduced from 0.20
+            'acceptance_rate': 0.10,     # Kept same
             'problem_popularity': 0.10,  # Kept same
-            'difficulty': 0.30      
+            'difficulty': 0.30 
         }
     }
     
