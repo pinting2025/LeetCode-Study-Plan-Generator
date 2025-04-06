@@ -659,6 +659,80 @@ class LeetCodeOptimizer:
         
         return plan_df
 
+    def evaluate_external_plan(self, plan_csv_path):
+        """
+        Evaluate an external plan (CSV of selected problems) using the original objective function.
+        The plan must contain a column 'id' matching the problem IDs in self.df.
+
+        Parameters:
+        -----------
+        plan_csv_path : str
+
+        Returns:
+        --------
+        float : Objective value of the external plan
+        """
+        print(f"\nEvaluating external plan: {plan_csv_path}")
+        plan_df = pd.read_csv(plan_csv_path)
+
+        if 'id' not in plan_df.columns:
+            raise ValueError("CSV must contain a column named 'id'.")
+
+        # Create a binary selection map from self.df.index
+        selected_ids = set(plan_df['id'].astype(str))
+        self.df['is_selected'] = self.df['id'].astype(str).isin(selected_ids).astype(int)
+
+        # Objective term 1: Target company match
+        target_company_obj = 0
+        for i in self.df.index:
+            companies = self.df.at[i, 'companies_list']
+            target_match = sum(1 for c in companies if c in self.target_companies)
+            denom = len(self.target_companies) if self.target_companies else 1
+            target_company_obj += self.df.at[i, 'is_selected'] * (target_match / denom)
+
+        # Objective term 2: Topic coverage score
+        # Score each topic once if covered by any selected problem
+        covered_topics = set()
+        for i in self.df.index:
+            if self.df.at[i, 'is_selected'] == 1:
+                covered_topics.update(self.df.at[i, 'topics_list'])
+
+        topic_coverage_obj = sum(
+            self.topic_importance.get(topic, {}).get(self.target_role, 0.5)
+            for topic in covered_topics
+        )
+
+        # Objective term 3: Normalized company count
+        company_count_obj = sum(
+            self.df.at[i, 'is_selected'] * self.df.at[i, 'normalized_company_count']
+            for i in self.df.index
+        )
+
+        # Objective term 4: Acceptance rate
+        acceptance_rate_obj = sum(
+            self.df.at[i, 'is_selected'] * (self.df.at[i, 'acceptance_rate'] / 100.0)
+            for i in self.df.index
+        )
+
+        # Objective term 5: Popularity
+        popularity_score_obj = sum(
+            self.df.at[i, 'is_selected'] * self.df.at[i, 'popularity_score']
+            for i in self.df.index
+        )
+
+        # Final objective
+        objective_value = (
+            self.weights['target_company'] * target_company_obj +
+            self.weights['topic_coverage'] * topic_coverage_obj +
+            self.weights['company_count'] * company_count_obj +
+            self.weights['acceptance_rate'] * acceptance_rate_obj +
+            self.weights['problem_popularity'] * popularity_score_obj
+        )
+
+        print("✅ Objective score of external plan: {:.4f}".format(objective_value))
+        return objective_value
+
+
 def main():
     # Define parameters
     params = {
@@ -677,7 +751,7 @@ def main():
     }
     
     # Create optimizer
-    optimizer = LeetCodeOptimizer('data/_leetcode_v2.csv', params)
+    optimizer = LeetCodeOptimizer(r'data\_leetcode_v2.csv', params)
     
     # Build and solve the model
     optimizer.build_model()
@@ -688,12 +762,54 @@ def main():
         study_plan = optimizer.create_study_plan()
         
         # Save results
-        results['selected_problems'].to_csv('mathematical_programming/result/selected_problems.csv', index=False)
-        study_plan.to_csv('mathematical_programming/result/study_plan.csv', index=False)
+        results['selected_problems'].to_csv(r'mathematical_programming\result\selected_problems.csv', index=False)
+        study_plan.to_csv( r'mathematical_programming\result\study_plan.csv', index=False)
         
         print("\nStudy plan created!")
         print(f"Selected {len(results['selected_problems'])} problems over {params['study_period_days']} days")
         print("Results saved to 'selected_problems.csv' and 'study_plan.csv'")
+        
+        # Evaluate external plan and compare to the optimized plan
+        external_plan_path = r'mathematical_programming\external_plans\leetcode_study_plan.csv'
+        external_df = pd.read_csv(external_plan_path)
+        result_length = len(results['selected_problems'])
+        external_length = len(external_df['difficulty'])
+        
+        try:
+            # Load and evaluate external plan
+            external_score = optimizer.evaluate_external_plan(external_plan_path) * (result_length / external_length)
+            optimized_score = results['objective_value']
+            
+            # Calculate improvement percentage
+
+            improvement_pct = ((optimized_score - external_score) / external_score) * 100 if external_score > 0 else float('inf')
+            
+            # Compare plans
+            print("\n" + "="*50)
+            print("PLAN COMPARISON:")
+            print("="*50)
+            print(f"MP plan score: {optimized_score:.4f}")
+            print(f"External plan score:  {external_score:.4f}")
+            print(f"Improvement: {improvement_pct:.2f}%")
+                        
+            # Compare difficulty distributions
+            optimized_difficulties = results['difficulty_distribution']
+            
+            if 'difficulty' in external_df.columns:
+                external_difficulties = external_df['difficulty'].value_counts().to_dict()
+                
+                print("\nDifficulty Distribution Comparison:")
+                print(f"{'Difficulty':<10} {'Optimized':<15} {'External':<15}")
+                print("-"*40)
+                for diff in ['Easy', 'Medium', 'Hard']:
+                    opt_count = optimized_difficulties.get(diff, 0)
+                    ext_count = external_difficulties.get(diff, 0)
+                    print(f"{diff:<10} {opt_count:<15} {ext_count:<15}")
+            
+        except Exception as e:
+            print(f"\nError evaluating external plan: {str(e)}")
+            import traceback
+            traceback.print_exc()
         
         # Print sample of the study plan
         print("\nSample of your study plan (first 5 days):")
@@ -705,6 +821,7 @@ def main():
                 print(f"  - {problem['title']} ({problem['difficulty']}, {problem['estimated_time']} min)")
                 print(f"    Topics: {', '.join(problem['topics'][:3])}" + 
                      (f" +{len(problem['topics'])-3} more" if len(problem['topics']) > 3 else ""))
-
+    
 if __name__ == "__main__":
     main()
+    
