@@ -22,11 +22,12 @@ def main():
         'study_period_days': 30,
         'max_study_hours_per_day': 2,
         'objective_weights': {
-            'target_company': 0.30,
-            'topic_coverage': 0.25,
-            'company_count': 0.20,
-            'acceptance_rate': 0.15,
-            'problem_popularity': 0.10
+            'target_company': 0.30,      # Reduced from 0.30
+            'topic_coverage': 0.25,      # Reduced from 0.25
+            'company_count': 0.20,       # Reduced from 0.20
+            'acceptance_rate': 0.15,     # Kept same
+            'problem_popularity': 0.10,  # Kept same
+            'difficulty': 0.30      
         }
     }
     
@@ -46,35 +47,35 @@ def main():
     iterations = 1000
     
     # Add destroy operators
-    alns.add_destroy_operator(destroy_topic_focused)
-    alns.add_destroy_operator(destroy_company_focused)
+    alns.add_destroy_operator(destroy_difficulty_focused)
+    # alns.add_destroy_operator(destroy_topic_focused)
+    # alns.add_destroy_operator(destroy_company_focused)
     alns.add_destroy_operator(destroy_random)
-#     alns.add_destroy_operator(destroy_difficulty_focused)
     
     # Add repair operators
-    alns.add_repair_operator(topic_coverage_repair)
+    alns.add_repair_operator(difficulty_repair)  
+    # alns.add_repair_operator(topic_coverage_repair)
     alns.add_repair_operator(greedy_repair)
-    alns.add_repair_operator(company_focused_repair)
-    alns.add_repair_operator(acceptance_rate_repair)
-    alns.add_repair_operator(popularity_repair)
+    # alns.add_repair_operator(company_focused_repair)
+    # alns.add_repair_operator(acceptance_rate_repair)
+    # alns.add_repair_operator(popularity_repair)
     
-    # # Acceptance criterion
-    # criterion = SimulatedAnnealing(
-    #     start_temperature=1000,  # High temperature to accept more solutions
-    #     end_temperature=100,     # Gradually become more selective
-    #     step=0.99               # Slower cooling to explore more
-    # )
+    criterion = SimulatedAnnealing(
+        start_temperature=2000,  # Higher temperature to accept more solutions initially
+        end_temperature=0.1,     # Lower end temperature to be more selective later
+        step=0.95               # Slower cooling to explore more
+    )
     
-    criterion = HillClimbing()
+    # criterion = HillClimbing()
     
     # Weights for operators
-    weights = [100, 20, 5, 1]  # Strong focus on global best
+    weights = [150, 100, 50, 20]  # Strong focus on global best
     
     # Run ALNS
     result = alns.iterate(
         initial_state,
         weights,
-        0.7,  # Quick operator adaptation
+        0.8,  # Quick operator adaptation
         criterion,
         iterations=iterations,
         collect_stats=True
@@ -126,7 +127,7 @@ def main():
         study_plan = optimizer.create_study_plan()
         
         # Save results
-        study_plan.to_csv('./adaptive_large_neighborhood_search/result/alns_study_plan.csv', index=False)
+        study_plan.to_csv('./adaptive_large_neighborhood_search/difficulty_focused/result/alns_study_plan.csv', index=False)
         
         print("\nStudy plan created!")
         print("Results saved to 'selected_problems.csv' and 'study_plan.csv'")
